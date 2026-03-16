@@ -41,11 +41,11 @@
     <h2 style="color: #ce9e48; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
 
     <div class="selector-area">
-        <div class="thumb active" onclick="changeCard('eid-garden.jpg', 36, 42, '#5d6d4e', this)">
+        <div class="thumb active" onclick="changeCard('eid-garden.jpg', 36, 42, '#5d6d4e', false, this)">
             <img src="eid-garden.jpg">
             <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">تصميم 1</p>
         </div>
-        <div class="thumb" onclick="changeCard('card.jpg', 58, 65, '#ce9e48', this)">
+        <div class="thumb" onclick="changeCard('card.jpg', 58, 65, '#ce9e48', true, this)">
             <img src="card.jpg">
             <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">تصميم 2</p>
         </div>
@@ -70,7 +70,7 @@
             <h3 style="color: #ce9e48;">إتمام الطلب</h3>
             <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
             <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
-            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان صالح</p>
+            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان العمار</p>
 
             <label class="checkbox-container">
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
@@ -81,7 +81,9 @@
     </div>
 
     <script>
-        function changeCard(imgSrc, topTo, topFrom, textColor, element) {
+        let showFromLabel = false; // التحكم في إظهار كلمة "من"
+
+        function changeCard(imgSrc, topTo, topFrom, textColor, needFrom, element) {
             document.getElementById('main-card-img').src = imgSrc;
             const toTxt = document.getElementById('display-to');
             const fromTxt = document.getElementById('display-from');
@@ -90,14 +92,24 @@
             fromTxt.style.top = topFrom + "%";
             toTxt.style.color = textColor;
             fromTxt.style.color = textColor;
+            
+            showFromLabel = needFrom;
+            updateText(); // تحديث النص فوراً عند تغيير البطاقة
 
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
         }
 
         function updateText() {
+            const fromValue = document.getElementById('input-from').value;
             document.getElementById('display-to').innerText = document.getElementById('input-to').value;
-            document.getElementById('display-from').innerText = document.getElementById('input-from').value;
+            
+            // إضافة كلمة "من: " فقط إذا كان التصميم يتطلب ذلك والقيمة ليست فارغة
+            if (showFromLabel && fromValue !== "") {
+                document.getElementById('display-from').innerText = "من: " + fromValue;
+            } else {
+                document.getElementById('display-from').innerText = fromValue;
+            }
         }
 
         function revealPayment() {
@@ -138,4 +150,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
