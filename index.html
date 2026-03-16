@@ -41,11 +41,11 @@
     <h2 style="color: #ce9e48; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
 
     <div class="selector-area">
-        <div class="thumb active" onclick="changeCard('eid-garden.jpg', 36, 42, '#5d6d4e', false, this)">
+        <div class="thumb active" onclick="changeCard('eid-garden.jpg', false, false, '#5d6d4e', this)">
             <img src="eid-garden.jpg">
             <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">تصميم 1</p>
         </div>
-        <div class="thumb" onclick="changeCard('card.jpg', 58, 65, '#ce9e48', true, this)">
+        <div class="thumb" onclick="changeCard('card.jpg', 58, 65, '#ce9e48', this)">
             <img src="card.jpg">
             <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">تصميم 2</p>
         </div>
@@ -54,8 +54,8 @@
     <div class="container">
         <div id="card-to-export">
             <img id="main-card-img" src="eid-garden.jpg" alt="بطاقة العيد" class="bg-image">
-            <div id="display-to" class="text-overlay" style="top: 36%; font-size: 1.8rem; right: 0; left: 0;"></div>
-            <div id="display-from" class="text-overlay" style="top: 42%; font-size: 1.4rem; right: 0; left: 0;"></div>
+            <div id="display-to" class="text-overlay" style="right: 0; left: 0;"></div>
+            <div id="display-from" class="text-overlay" style="right: 0; left: 0;"></div>
         </div>
     </div>
 
@@ -81,20 +81,26 @@
     </div>
 
     <script>
-        let showFromLabel = false; // التحكم في إظهار كلمة "من"
-
-        function changeCard(imgSrc, topTo, topFrom, textColor, needFrom, element) {
+        function changeCard(imgSrc, topTo, topFrom, textColor, element) {
             document.getElementById('main-card-img').src = imgSrc;
             const toTxt = document.getElementById('display-to');
             const fromTxt = document.getElementById('display-from');
             
-            toTxt.style.top = topTo + "%";
-            fromTxt.style.top = topFrom + "%";
-            toTxt.style.color = textColor;
-            fromTxt.style.color = textColor;
-            
-            showFromLabel = needFrom;
-            updateText(); // تحديث النص فوراً عند تغيير البطاقة
+            // في حال عدم وجود إحداثيات (تصميم 1)، يتم إخفاء النصوص
+            if (!topTo) {
+                toTxt.innerText = "";
+                fromTxt.innerText = "";
+                toTxt.style.display = 'none';
+                fromTxt.style.display = 'none';
+            } else {
+                toTxt.style.display = 'block';
+                fromTxt.style.display = 'block';
+                toTxt.style.top = topTo + "%";
+                fromTxt.style.top = topFrom + "%";
+                toTxt.style.color = textColor;
+                fromTxt.style.color = textColor;
+                updateText(); // تحديث النص فوراً عند تغيير البطاقة
+            }
 
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
@@ -102,22 +108,32 @@
 
         function updateText() {
             const fromValue = document.getElementById('input-from').value;
-            document.getElementById('display-to').innerText = document.getElementById('input-to').value;
+            const activeThumb = document.querySelector('.thumb.active p').innerText;
             
-            // إضافة كلمة "من: " فقط إذا كان التصميم يتطلب ذلك والقيمة ليست فارغة
-            if (showFromLabel && fromValue !== "") {
-                document.getElementById('display-from').innerText = "من: " + fromValue;
-            } else {
+            // إضافة النصوص فقط للتصميم 2
+            if (activeThumb === "تصميم 2") {
+                document.getElementById('display-to').innerText = document.getElementById('input-to').value;
                 document.getElementById('display-from').innerText = fromValue;
+            } else {
+                // التصميم 1 يجب أن يظل خالياً من النصوص
+                document.getElementById('display-to').innerText = "";
+                document.getElementById('display-from').innerText = "";
             }
         }
 
         function revealPayment() {
-            if(document.getElementById('input-to').value === "" || document.getElementById('input-from').value === "") {
-                alert("لطفاً اكتب الأسماء أولاً"); return;
+            const inputsArea = document.getElementById('inputs-area');
+            const toInput = document.getElementById('input-to');
+            const fromInput = document.getElementById('input-from');
+            const activeThumb = document.querySelector('.thumb.active p').innerText;
+
+            // في التصميم 1، لا نطلب الأسماء كشرط للدفع لأنها لن تظهر
+            if (activeThumb === "تصميم 2" && (toInput.value === "" || fromInput.value === "")) {
+                alert("لطفاً اكتب الأسماء أولاً للتصميم الثاني"); return;
             }
+            
             document.getElementById('payment-section').style.display = 'block';
-            document.getElementById('inputs-area').style.display = 'none';
+            inputsArea.style.display = 'none';
         }
 
         function toggleDownloadBtn() {
