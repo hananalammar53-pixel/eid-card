@@ -2,40 +2,38 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HSforDesign | بطاقات العيد</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
         .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; border: 2px solid #ce9e48; }
-        #card-to-export { position: relative; width: 100%; line-height: 0; background-color: #2a2a2a; }
+        #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
         .text-overlay { 
             position: absolute; width: 100%; text-align: center; color: #ce9e48; 
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Amiri', serif; 
-            font-size: 1.8rem; pointer-events: none; line-height: 1.2;
+            font-size: 1.6rem; pointer-events: none; line-height: 1.2;
         }
-        /* تعديل مواقع الأسماء لتناسب التصميم في الصورة */
-        #display-to { top: 31%; left: -10%; width: 100%; } 
-        #display-from { top: 39%; left: -10%; width: 100%; } 
+        /* تعديل دقيق للمواقع لتناسب تصميمك */
+        #display-to { top: 31%; left: 0; } 
+        #display-from { top: 39%; left: 0; } 
 
         .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; text-align: center; }
         input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #444; border-radius: 8px; background: #333; color: white; box-sizing: border-box; text-align: center; font-size: 1rem; outline: none; }
 
-        .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         
-        /* قسم الدفع */
-        #payment-section { display: none; margin-top: 20px; border-top: 1px dashed #ce9e48; padding-top: 20px; }
+        #payment-section { display: none; margin-top: 25px; border-top: 2px dashed #444; padding-top: 20px; }
         .qr-code { width: 180px; height: auto; margin: 15px auto; display: block; border-radius: 10px; border: 3px solid #ce9e48; background: white; padding: 5px; }
         .iban-style { background: #111; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #ce9e48; display: block; margin: 10px 0; word-break: break-all; }
         
-        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; margin: 20px 0; cursor: pointer; }
+        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: bold; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -44,7 +42,7 @@
 
     <div class="container">
         <div id="card-to-export">
-            <img src="card.jpg" alt="خلفية البطاقة" class="bg-image">
+            <img src="card.jpg" alt="البطاقة" class="bg-image">
             <div id="display-to" class="text-overlay"></div>
             <div id="display-from" class="text-overlay"></div>
         </div>
@@ -54,19 +52,18 @@
         <input type="text" id="input-to" placeholder="إلى: اسم المستلم" oninput="updateText()">
         <input type="text" id="input-from" placeholder="من: اسمك أو عائلتك" oninput="updateText()">
         
-        <button type="button" id="showPayBtn" class="btn-primary" onclick="revealPayment()">إظهار معلومات الدفع (1 ريال)</button>
+        <button type="button" id="mainPayBtn" class="btn-primary">إظهار معلومات الدفع (1 ريال)</button>
 
         <div id="payment-section">
-            <p style="font-size: 0.9rem; color: #ccc;">يمكنك التحويل عبر الآيبان أو مسح الكود:</p>
-            <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
+            <img src="rajhi-qr.jpg" alt="QR" class="qr-code">
             <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
-            <p style="font-weight: bold; font-size: 0.9rem; color: #ce9e48;">المستفيد: حنان العمار</p>
+            <p style="font-weight: bold; color: #ce9e48;">حنان العمار</p>
 
             <label class="checkbox-container">
-                <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
+                <input type="checkbox" id="paidCheck"> أكدت عملية التحويل بنجاح
             </label>
 
-            <button id="downloadBtn" class="btn-download" onclick="downloadCard()">تحميل البطاقة ✅</button>
+            <button id="downloadBtn" class="btn-download">حفظ البطاقة ✅</button>
         </div>
     </div>
 
@@ -76,43 +73,32 @@
             document.getElementById('display-from').innerText = document.getElementById('input-from').value;
         }
 
-        function revealPayment() {
-            var toName = document.getElementById('input-to').value;
-            var fromName = document.getElementById('input-from').value;
+        // ربط مباشر للزر لضمان العمل في الجوال
+        document.getElementById('mainPayBtn').onclick = function() {
+            const t = document.getElementById('input-to').value.trim();
+            const f = document.getElementById('input-from').value.trim();
+            if(t === "" || f === "") { alert("أكمل الأسماء أولاً"); return; }
             
-            if(toName.trim() === "" || fromName.trim() === "") {
-                alert("لطفاً، اكتب الأسماء أولاً");
-                return;
-            }
-            
-            // إظهار القسم
             document.getElementById('payment-section').style.display = 'block';
-            document.getElementById('showPayBtn').style.display = 'none';
-            
-            // قفزة صغيرة للشاشة ليظهر الكود بوضوح
-            window.scrollBy({ top: 300, behavior: 'smooth' });
-        }
+            this.style.display = 'none';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        };
 
-        function toggleDownloadBtn() {
-            var isChecked = document.getElementById('paidCheck').checked;
-            document.getElementById('downloadBtn').style.display = isChecked ? 'block' : 'none';
-        }
+        document.getElementById('paidCheck').onchange = function() {
+            document.getElementById('downloadBtn').style.display = this.checked ? 'block' : 'none';
+        };
 
-        function downloadCard() {
-            const btn = document.getElementById('downloadBtn');
-            btn.innerText = "جاري الحفظ...";
-            
-            html2canvas(document.getElementById("card-to-export"), {
-                useCORS: true,
-                scale: 3
-            }).then(canvas => {
+        document.getElementById('downloadBtn').onclick = function() {
+            const b = this;
+            b.innerText = "جاري الحفظ...";
+            html2canvas(document.getElementById("card-to-export"), { useCORS: true, scale: 3 }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'Eid-Card.png';
                 link.href = canvas.toDataURL("image/png");
                 link.click();
-                btn.innerText = "تم التحميل! ✅";
+                b.innerText = "تم الحفظ ✅";
             });
-        }
+        };
     </script>
 </body>
-</html>
+</html> 
