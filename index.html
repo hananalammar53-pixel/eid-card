@@ -17,6 +17,7 @@
         .text-overlay { 
             position: absolute; width: 100%; text-align: center; color: #5d6d4e; 
             font-family: 'Amiri', serif; pointer-events: none; transition: all 0.3s;
+            font-weight: bold;
         }
         
         .selector-area { width: 100%; max-width: 400px; display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
@@ -42,7 +43,7 @@
     <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 15px;">اختر التصميم المفضل لديك 👇</p>
 
     <div class="selector-area">
-        <div class="thumb active" onclick="changeCard('eid-garden.jpg', 52, 58, '#5d6d4e', this)">
+        <div class="thumb active" onclick="changeCard('eid-garden.jpg', 18, 23, '#5d6d4e', this)">
             <img src="eid-garden.jpg" alt="1">
             <p style="font-size: 0.7rem; color: #ce9e48; margin: 5px 0;">تصميم 1</p>
         </div>
@@ -55,8 +56,8 @@
     <div class="container">
         <div id="card-to-export">
             <img id="main-card-img" src="eid-garden.jpg" alt="بطاقة العيد" class="bg-image">
-            <div id="display-to" class="text-overlay" style="top: 52%; font-size: 1.5rem;"></div>
-            <div id="display-from" class="text-overlay" style="top: 58%; font-size: 1.2rem;"></div>
+            <div id="display-to" class="text-overlay" style="top: 18%; font-size: 1.6rem;"></div>
+            <div id="display-from" class="text-overlay" style="top: 23%; font-size: 1.3rem;"></div>
         </div>
     </div>
 
@@ -71,7 +72,7 @@
             <h3 style="color: #ce9e48;">إتمام الطلب</h3>
             <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
             <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
-            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان العمار</p>
+            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان صالح</p>
 
             <label class="checkbox-container">
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
@@ -98,7 +99,7 @@
 
         function updateText() {
             document.getElementById('display-to').innerText = document.getElementById('input-to').value;
-            document.getElementById('display-from').innerText = "من: " + document.getElementById('input-from').value;
+            document.getElementById('display-from').innerText = document.getElementById('input-from').value;
         }
 
         function revealPayment() {
@@ -139,4 +140,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
