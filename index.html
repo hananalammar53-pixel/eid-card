@@ -14,6 +14,7 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
+        /* إحداثيات النصوص المضبوطة */
         .text-overlay { 
             position: absolute; width: 100%; text-align: center; color: #ce9e48; 
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Amiri', serif; 
@@ -31,7 +32,7 @@
         .qr-code { width: 180px; height: auto; margin: 15px auto; display: block; border-radius: 10px; border: 3px solid #ce9e48; background: white; padding: 5px; }
         .iban-style { background: #111; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #ce9e48; display: block; margin: 10px 0; word-break: break-all; }
         
-        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; line-height: 1.4; }
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; cursor: pointer; color: #ddd; }
     </style>
 </head>
@@ -64,7 +65,7 @@
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
             </label>
 
-            <button id="downloadBtn" class="btn-download" onclick="downloadCard()">حفظ البطاقة وتأكيد الدفع 🚀</button>
+            <button id="downloadBtn" class="btn-download" onclick="startProcess()">تأكيد الدفع وحفظ البطاقة 🚀</button>
             <p style="font-size: 0.8rem; color: #888; margin-top: 15px; cursor: pointer; text-decoration: underline;" onclick="location.reload()">تعديل الأسماء ↩️</p>
         </div>
     </div>
@@ -89,29 +90,38 @@
             document.getElementById('downloadBtn').style.display = isChecked ? 'block' : 'none';
         }
 
-        function downloadCard() {
+        function startProcess() {
             const btn = document.getElementById('downloadBtn');
-            btn.innerText = "جاري الحفظ...";
-            btn.disabled = true;
             
-            html2canvas(document.querySelector("#card-to-export"), {
-                useCORS: true,
-                scale: 3 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Eid-Greeting-HS.png';
-                link.href = canvas.toDataURL("image/png");
-                link.click();
+            // 1. فتح تليجرام فوراً
+            window.open(`https://t.me/ha53al`, '_blank');
+            
+            // 2. بدء العد التنازلي لمدة دقيقة (60 ثانية)
+            btn.disabled = true;
+            let secondsLeft = 60;
+            
+            const countdown = setInterval(() => {
+                secondsLeft--;
+                btn.innerText = `ارسل الإيصال.. سيتم الحفظ تلقائياً خلال ${secondsLeft} ثانية`;
                 
-                btn.innerText = "تم الحفظ! فتح تليجرام...";
-                
-                setTimeout(() => {
-                    // التوجيه لرابط تليجرام الخاص بك
-                    window.open(`https://t.me/ha53al`, '_blank');
-                    btn.innerText = "تم بنجاح ✅";
-                    btn.disabled = false;
-                }, 2000);
-            });
+                if (secondsLeft <= 0) {
+                    clearInterval(countdown);
+                    btn.innerText = "جاري حفظ البطاقة الآن...";
+                    
+                    html2canvas(document.querySelector("#card-to-export"), {
+                        useCORS: true,
+                        scale: 3 
+                    }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = 'Eid-Greeting-HS.png';
+                        link.href = canvas.toDataURL("image/png");
+                        link.click();
+                        
+                        btn.innerText = "تم الحفظ بنجاح ✅";
+                        btn.disabled = false;
+                    });
+                }
+            }, 1000);
         }
     </script>
 </body>
