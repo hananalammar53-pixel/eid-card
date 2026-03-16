@@ -57,7 +57,8 @@
     </div>
 
     <div class="panel">
-        <div id="inputs-area" style="display: none;"> <input type="text" id="input-to" placeholder="إلى: (اسم المستلم)" oninput="updateText()">
+        <div id="inputs-area" style="display: none;">
+            <input type="text" id="input-to" placeholder="إلى: (اسم المستلم)" oninput="updateText()">
             <input type="text" id="input-from" placeholder="من: (اسمك)" oninput="updateText()">
         </div>
         
@@ -82,12 +83,10 @@
             document.getElementById('main-card-img').src = imgSrc;
             hasNames = needsNames;
             
-            // التحكم في إظهار وإخفاء خانات الأسماء والنصوص على البطاقة
             document.getElementById('inputs-area').style.display = needsNames ? 'block' : 'none';
             document.getElementById('display-to').style.display = needsNames ? 'block' : 'none';
             document.getElementById('display-from').style.display = needsNames ? 'block' : 'none';
             
-            // تصفير القيم عند التبديل
             if(!needsNames) {
                 document.getElementById('display-to').innerText = "";
                 document.getElementById('display-from').innerText = "";
@@ -96,7 +95,6 @@
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
             
-            // إعادة إظهار زر الدفع وإخفاء قسم الدفع عند تغيير البطاقة لتجنب الأخطاء
             document.getElementById('payment-section').style.display = 'none';
             document.getElementById('main-action-btn').style.display = 'block';
         }
@@ -137,6 +135,10 @@
                         link.download = 'HS-Eid-Card.jpg';
                         link.href = canvas.toDataURL("image/jpeg");
                         link.click();
+                        
+                        // الرسالة المطلوبة بعد التحميل
+                        alert("تم تحميل البطاقة بنجاح ✅\nستجد الصورة في معرض الصور أو في مجلد التنزيلات.");
+                        
                         btn.innerText = "تم الحفظ بنجاح ✅";
                         btn.disabled = false;
                     });
