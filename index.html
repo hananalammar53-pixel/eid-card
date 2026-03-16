@@ -64,7 +64,7 @@
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
             </label>
 
-            <button id="downloadBtn" class="btn-download" onclick="downloadCard()">تحميل البطاقة وإرسال الإيصال ✅</button>
+            <button id="downloadBtn" class="btn-download" onclick="downloadCard()">حفظ البطاقة وتأكيد الدفع 🚀</button>
             <p style="font-size: 0.8rem; color: #888; margin-top: 15px; cursor: pointer; text-decoration: underline;" onclick="location.reload()">تعديل الأسماء ↩️</p>
         </div>
     </div>
@@ -91,7 +91,7 @@
 
         function downloadCard() {
             const btn = document.getElementById('downloadBtn');
-            btn.innerText = "جاري التحميل...";
+            btn.innerText = "جاري الحفظ...";
             btn.disabled = true;
             
             html2canvas(document.querySelector("#card-to-export"), {
@@ -103,13 +103,12 @@
                 link.href = canvas.toDataURL("image/png");
                 link.click();
                 
-                btn.innerText = "تم التحميل! فتح الواتساب...";
+                btn.innerText = "تم الحفظ! فتح تليجرام...";
                 
                 setTimeout(() => {
-                    const phone = "966534781181";
-                    const message = "مرحباً ، أرفق لكم إيصال التحويل لبطاقة العيد من متجر HSforDesign.";
-                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-                    btn.innerText = "تم التحميل بنجاح ✅";
+                    // التوجيه لرابط تليجرام الخاص بك
+                    window.open(`https://t.me/ha53al`, '_blank');
+                    btn.innerText = "تم بنجاح ✅";
                     btn.disabled = false;
                 }, 2000);
             });
