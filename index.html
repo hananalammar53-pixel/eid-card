@@ -1,49 +1,71 @@
-<button id="downloadBtn" class="btn-download" onclick="downloadCard()">حمل بطاقتك الآن ✅</button>
-        <p style="font-size: 0.7rem; color: #888; margin-top: 10px;" onclick="location.reload()">تعديل الأسماء ↩️</p>
+<h3 style="color: #ce9e48; margin-top: 0;">إتمام عملية الدفع</h3>
+        <p style="font-size: 0.9rem; color: #ccc;">امسح الكود عبر تطبيق البنك أو حول للآيبان:</p>
+        
+        <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
+        
+        <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
+        <p style="font-weight: bold; font-size: 0.9rem; color: #ce9e48;">حنان العمار</p>
+
+        <label class="checkbox-container">
+            <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> لقد قمت بتحويل المبلغ بنجاح
+        </label>
+
+        <button id="downloadBtn" class="btn-download" onclick="downloadCard()">تحميل البطاقة بجودة عالية ✅</button>
+        <div class="back-link" onclick="location.reload()">↩️ عودة لتعديل الأسماء</div>
     </div>
 
     <script>
-        // تحديث النص فور الكتابة
+        // تحديث النصوص فوراً أثناء الكتابة
         function updateText() {
             document.getElementById('display-to').innerText = document.getElementById('input-to').value;
             document.getElementById('display-from').innerText = document.getElementById('input-from').value;
         }
 
-        // الانتقال لصفحة الدفع
+        // إخفاء واجهة الأسماء وإظهار واجهة الدفع
         function showPayment() {
             const to = document.getElementById('input-to').value;
             const from = document.getElementById('input-from').value;
             
             if(!to || !from) {
-                alert("يرجى كتابة الأسماء أولاً");
+                alert("لطفاً، أكمل الأسماء أولاً");
                 return;
             }
             
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
+            window.scrollTo(0, 0); // للعودة لأعلى الصفحة في الجوال
         }
 
-        // إظهار زر التحميل بعد تأكيد الدفع
+        // إظهار زر التحميل فقط عند الضغط على المربع
         function toggleDownloadBtn() {
             const isChecked = document.getElementById('paidCheck').checked;
             const btn = document.getElementById('downloadBtn');
             btn.style.display = isChecked ? 'block' : 'none';
         }
 
-        // وظيفة التحميل
+        // معالجة التحميل كصورة
         function downloadCard() {
             const btn = document.getElementById('downloadBtn');
-            btn.innerText = "جاري تحضير الملف...";
+            const originalText = btn.innerText;
+            btn.innerText = "جاري إنشاء البطاقة...";
+            btn.disabled = true;
             
             html2canvas(document.querySelector("#card-to-export"), {
                 useCORS: true,
-                scale: 3 
+                scale: 3, // دقة عالية جداً للطباعة
+                backgroundColor: null
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'Eid-Greeting-HS.png';
                 link.href = canvas.toDataURL("image/png");
                 link.click();
-                btn.innerText = "تم التحميل بنجاح ✅";
+                
+                btn.innerText = "تم التحميل بنجاح! 🎉";
+                btn.style.background = "#555";
+            }).catch(err => {
+                alert("حدث خطأ أثناء التحميل، يرجى المحاولة مرة أخرى.");
+                btn.innerText = originalText;
+                btn.disabled = false;
             });
         }
     </script>
