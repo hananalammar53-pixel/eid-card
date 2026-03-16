@@ -6,24 +6,26 @@
     <title>HSforDesign | بطاقات العيد</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #ce9e48; }
+        .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #ce9e48; margin-bottom: 20px; }
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
         .text-overlay { 
-            position: absolute; width: 100%; text-align: center; color: #ce9e48; 
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Amiri', serif; 
-            font-size: 1.8rem; pointer-events: none; 
+            position: absolute; width: 100%; text-align: center; color: #5d6d4e; 
+            font-family: 'Amiri', serif; pointer-events: none; transition: all 0.3s;
         }
         
-        #display-to { top: 56.5%; left: 0; } 
-        #display-from { top: 66%; left: 0; } 
+        /* المعرض الصغير للاختيار */
+        .selector-area { width: 100%; max-width: 400px; display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .thumb { width: 80px; height: 120px; border-radius: 8px; border: 2px solid #444; cursor: pointer; overflow: hidden; opacity: 0.6; transition: 0.3s; }
+        .thumb.active { border-color: #ce9e48; opacity: 1; transform: scale(1.1); }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-        .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; text-align: center; margin-top: 20px; }
+        .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; text-align: center; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #444; border-radius: 5px; background: #333; color: white; box-sizing: border-box; text-align: center; font-size: 1rem; outline: none; }
         
         .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
@@ -31,93 +33,107 @@
         .qr-code { width: 180px; height: auto; margin: 15px auto; display: block; border-radius: 10px; border: 3px solid #ce9e48; background: white; padding: 5px; }
         .iban-style { background: #111; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #ce9e48; display: block; margin: 10px 0; word-break: break-all; }
         
-        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; line-height: 1.4; }
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; cursor: pointer; color: #ddd; }
+        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; color: #ddd; }
     </style>
 </head>
 <body>
 
-    <h2 style="color: #ce9e48; font-family: 'Amiri', serif;">HSforDesign</h2>
+    <h2 style="color: #ce9e48; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
+    <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 15px;">اختر التصميم المفضل لديك 👇</p>
+
+    <div class="selector-area">
+        <div class="thumb active" onclick="changeCard('eid-garden.png', 52, 58, '#5d6d4e', this)">
+            <img src="eid-garden.png" alt="تصميم الحديقة">
+        </div>
+        <div class="thumb" onclick="changeCard('card.jpg', 56.5, 66, '#ce9e48', this)">
+            <img src="card.jpg" alt="تصميم كلاسيك">
+        </div>
+    </div>
 
     <div class="container">
         <div id="card-to-export">
-            <img src="card.jpg" alt="بطاقة العيد" class="bg-image">
-            <div id="display-to" class="text-overlay"></div>
-            <div id="display-from" class="text-overlay"></div>
+            <img id="main-card-img" src="eid-garden.png" alt="بطاقة العيد" class="bg-image">
+            <div id="display-to" class="text-overlay" style="top: 52%; font-size: 1.5rem;"></div>
+            <div id="display-from" class="text-overlay" style="top: 58%; font-size: 1.2rem;"></div>
         </div>
     </div>
 
     <div class="panel">
         <div id="inputs-area">
-            <input type="text" id="input-to" placeholder="اسم المستلم (إلى)" oninput="updateText()">
-            <input type="text" id="input-from" placeholder="اسمك/عائلتك (من)" oninput="updateText()">
-            <button type="button" id="showPayBtn" class="btn-primary" onclick="revealPayment()">التوجه للدفع (1 ريال)</button>
+            <input type="text" id="input-to" placeholder="إلى: (اسم المستلم)" oninput="updateText()">
+            <input type="text" id="input-from" placeholder="من: (اسمك أو عائلتك)" oninput="updateText()">
+            <button type="button" class="btn-primary" onclick="revealPayment()">الاستمرار للدفع</button>
         </div>
 
         <div id="payment-section">
-            <h3 style="color: #ce9e48; margin-top: 0;">إتمام عملية الدفع</h3>
+            <h3 style="color: #ce9e48;">إتمام الطلب</h3>
             <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
             <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
-            <p style="font-weight: bold; font-size: 0.9rem; color: #ce9e48;">المستفيد: حنان صالح</p>
+            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان العمار</p>
 
             <label class="checkbox-container">
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
             </label>
 
-            <button id="downloadBtn" class="btn-download" onclick="startProcess()">تأكيد الدفع وحفظ البطاقة 🚀</button>
-            <p style="font-size: 0.8rem; color: #888; margin-top: 15px; cursor: pointer; text-decoration: underline;" onclick="location.reload()">تعديل الأسماء ↩️</p>
+            <button id="downloadBtn" class="btn-download" onclick="startProcess()">إرسال الإيصال وتحميل البطاقة 🚀</button>
         </div>
     </div>
 
     <script>
+        function changeCard(imgSrc, topTo, topFrom, textColor, element) {
+            // تحديث الصورة
+            document.getElementById('main-card-img').src = imgSrc;
+            
+            // تحديث مواقع وألوان النصوص لتناسب كل بطاقة
+            const toTxt = document.getElementById('display-to');
+            const fromTxt = document.getElementById('display-from');
+            
+            toTxt.style.top = topTo + "%";
+            fromTxt.style.top = topFrom + "%";
+            toTxt.style.color = textColor;
+            fromTxt.style.color = textColor;
+
+            // تحديث التحديد في المعرض
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+        }
+
         function updateText() {
             document.getElementById('display-to').innerText = document.getElementById('input-to').value;
-            document.getElementById('display-from').innerText = document.getElementById('input-from').value;
+            document.getElementById('display-from').innerText = "من: " + document.getElementById('input-from').value;
         }
 
         function revealPayment() {
-            const t = document.getElementById('input-to').value.trim();
-            const f = document.getElementById('input-from').value.trim();
-            if(t === "" || f === "") { alert("لطفاً، أكمل الأسماء أولاً"); return; }
+            if(document.getElementById('input-to').value === "" || document.getElementById('input-from').value === "") {
+                alert("لطفاً اكتب الأسماء أولاً"); return;
+            }
             document.getElementById('payment-section').style.display = 'block';
             document.getElementById('inputs-area').style.display = 'none';
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
         function toggleDownloadBtn() {
-            const isChecked = document.getElementById('paidCheck').checked;
-            document.getElementById('downloadBtn').style.display = isChecked ? 'block' : 'none';
+            document.getElementById('downloadBtn').style.display = document.getElementById('paidCheck').checked ? 'block' : 'none';
         }
 
         function startProcess() {
-            const btn = document.getElementById('downloadBtn');
-            
-            // تنبيه العميل بضرورة العودة
-            alert("سيتم نقلك لبوت المتجر لإرسال الإيصال. \n\n⚠️ يرجى العودة للموقع فوراً لانتظار تحميل بطاقتك تلقائياً.");
-
-            // فتح رابط البوت الجديد
+            alert("سيتم نقلك للبوت لإرسال الإيصال. يرجى العودة فوراً للتحميل.");
             window.open(`https://t.me/HSfordesign_bot`, '_blank');
             
+            let btn = document.getElementById('downloadBtn');
             btn.disabled = true;
-            let secondsLeft = 60;
+            let sec = 60;
             
-            const countdown = setInterval(() => {
-                secondsLeft--;
-                btn.innerText = `ارسل الإيصال.. سيتم الحفظ تلقائياً خلال ${secondsLeft} ثانية`;
-                
-                if (secondsLeft <= 0) {
-                    clearInterval(countdown);
-                    btn.innerText = "جاري الحفظ الآن...";
-                    
-                    html2canvas(document.querySelector("#card-to-export"), {
-                        useCORS: true,
-                        scale: 3 
-                    }).then(canvas => {
-                        const link = document.createElement('a');
-                        link.download = 'Eid-Greeting-HS.png';
-                        link.href = canvas.toDataURL("image/png");
+            let timer = setInterval(() => {
+                sec--;
+                btn.innerText = `جاري التحميل تلقائياً خلال ${sec} ثانية...`;
+                if(sec <= 0) {
+                    clearInterval(timer);
+                    html2canvas(document.querySelector("#card-to-export"), {useCORS: true, scale: 3}).then(canvas => {
+                        let link = document.createElement('a');
+                        link.download = 'HS-Eid-Card.png';
+                        link.href = canvas.toDataURL();
                         link.click();
-                        
                         btn.innerText = "تم الحفظ بنجاح ✅";
                         btn.disabled = false;
                     });
