@@ -14,7 +14,6 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
-        /* إحداثيات النصوص المضبوطة */
         .text-overlay { 
             position: absolute; width: 100%; text-align: center; color: #ce9e48; 
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Amiri', serif; 
@@ -59,7 +58,7 @@
             <h3 style="color: #ce9e48; margin-top: 0;">إتمام عملية الدفع</h3>
             <img src="rajhi-qr.jpg" alt="كود الراجحي" class="qr-code">
             <span class="iban-style">SA83 8000 0866 6080 1163 4427</span>
-            <p style="font-weight: bold; font-size: 0.9rem; color: #ce9e48;">المستفيد: حنان العمار</p>
+            <p style="font-weight: bold; font-size: 0.9rem; color: #ce9e48;">المستفيد: حنان صالح</p>
 
             <label class="checkbox-container">
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
@@ -93,10 +92,12 @@
         function startProcess() {
             const btn = document.getElementById('downloadBtn');
             
-            // 1. فتح تليجرام فوراً
-            window.open(`https://t.me/ha53al`, '_blank');
+            // تنبيه العميل بضرورة العودة
+            alert("سيتم نقلك لبوت المتجر لإرسال الإيصال. \n\n⚠️ يرجى العودة للموقع فوراً لانتظار تحميل بطاقتك تلقائياً.");
+
+            // فتح رابط البوت الجديد
+            window.open(`https://t.me/HSfordesign_bot`, '_blank');
             
-            // 2. بدء العد التنازلي لمدة دقيقة (60 ثانية)
             btn.disabled = true;
             let secondsLeft = 60;
             
@@ -106,7 +107,7 @@
                 
                 if (secondsLeft <= 0) {
                     clearInterval(countdown);
-                    btn.innerText = "جاري حفظ البطاقة الآن...";
+                    btn.innerText = "جاري الحفظ الآن...";
                     
                     html2canvas(document.querySelector("#card-to-export"), {
                         useCORS: true,
