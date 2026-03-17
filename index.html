@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSforDesign | بطاقات العيد</title>
+    <title>HSforDesign | متجر البطاقات</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
@@ -14,13 +14,11 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
-        /* العلامة المائية السوداء البارزة */
+        /* العلامة المائية السوداء للحماية */
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); /* لون أسود شفاف قليلاً ليظهر فوق التصميم */
-            font-weight: 900; pointer-events: none; white-space: nowrap; z-index: 10;
-            font-family: 'Segoe UI', sans-serif; text-transform: uppercase;
-            letter-spacing: 5px; text-shadow: 1px 1px 2px rgba(255,255,255,0.1);
+            font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); font-weight: 900; pointer-events: none;
+            white-space: nowrap; z-index: 10; font-family: sans-serif; text-transform: uppercase;
         }
 
         .text-overlay { position: absolute; width: 100%; text-align: center; pointer-events: none; font-family: 'Amiri', serif; font-weight: bold; display: none; }
@@ -31,10 +29,14 @@
         .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #444; border-radius: 5px; background: #333; color: white; text-align: center; font-size: 1rem; outline: none; }
         .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        
+        /* قسم بيانات الحساب البنكي */
         #payment-section { display: none; margin-top: 20px; border-top: 2px dashed #444; padding-top: 20px; text-align: center; }
-        .iban-style { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #ce9e48; display: block; margin: 15px 0; border: 1px solid #444; cursor: pointer; }
+        .iban-card { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #ce9e48; display: block; margin: 15px 0; border: 1px solid #444; cursor: pointer; position: relative; }
+        .iban-card:active { background: #222; }
+        
         .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; color: #ddd; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; margin: 15px 0; color: #bbb; }
     </style>
 </head>
 <body>
@@ -44,11 +46,11 @@
     <div class="selector-area">
         <div class="thumb active" onclick="changeCard('eid-garden.jpg', false, this)">
             <img src="eid-garden.jpg">
-            <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">بطاقة جاهزة</p>
+            <p style="font-size: 0.7rem; color: #ddd; margin: 5px 0;">جاهزة</p>
         </div>
         <div class="thumb" onclick="changeCard('card.jpg', true, this)">
             <img src="card.jpg">
-            <p style="font-size: 0.75rem; color: #ddd; margin: 5px 0;">بطاقة بالأسماء</p>
+            <p style="font-size: 0.7rem; color: #ddd; margin: 5px 0;">بالأسماء</p>
         </div>
     </div>
 
@@ -56,9 +58,8 @@
         <div id="card-to-export">
             <img id="main-card-img" src="eid-garden.jpg" class="bg-image">
             <div id="wm" class="watermark">HS DESIGN</div>
-            
-            <div id="display-to" class="text-overlay" style="top: 58%; font-size: 1.8rem; right: 0; left: 0; color:#ce9e48;"></div>
-            <div id="display-from" class="text-overlay" style="top: 65%; font-size: 1.4rem; right: 0; left: 0; color:#ce9e48;"></div>
+            <div id="display-to" class="text-overlay" style="top: 58%; font-size: 1.8rem; color:#ce9e48;"></div>
+            <div id="display-from" class="text-overlay" style="top: 65%; font-size: 1.4rem; color:#ce9e48;"></div>
         </div>
     </div>
 
@@ -71,15 +72,20 @@
         <button id="main-action-btn" type="button" class="btn-primary" onclick="revealPayment()">الاستمرار للدفع</button>
 
         <div id="payment-section">
-            <h3 style="color: #ce9e48;">بيانات التحويل</h3>
-            <div class="iban-style" onclick="copyIBAN()">
-                SA83 8000 0866 6080 1163 4427
-                <div style="font-size: 0.7rem; color: #888; margin-top: 5px;">(اضغط لنسخ الايبان)</div>
+            <h3 style="color: #ce9e48; margin-bottom: 5px;">تفاصيل الدفع</h3>
+            <p style="font-size: 0.85rem; color: #aaa;">يرجى تحويل المبلغ للايبان التالي:</p>
+            
+            <div class="iban-card" onclick="copyIBAN()">
+                <span id="iban-text">SA83 8000 0866 6080 1163 4427</span>
+                <div style="font-size: 0.7rem; color: #666; margin-top: 5px;">(اضغط للنسخ)</div>
             </div>
-            <p style="font-weight: bold; color: #ce9e48;">المستفيد: حنان العمار</p>
+            
+            <p style="font-weight: bold; color: #ce9e48; margin: 5px 0;">المستفيد: حنان العمار</p>
+            
             <label class="checkbox-container">
                 <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
             </label>
+            
             <button id="downloadBtn" class="btn-download" onclick="startProcess()">إرسال الإيصال وتحميل البطاقة 🚀</button>
         </div>
     </div>
@@ -89,7 +95,7 @@
 
         function copyIBAN() {
             navigator.clipboard.writeText("SA8380000866608011634427");
-            alert("تم نسخ الايبان بنجاح");
+            alert("تم نسخ الايبان بنجاح، يمكنك اللصق في تطبيق بنكك.");
         }
 
         function changeCard(imgSrc, needsNames, element) {
@@ -99,11 +105,6 @@
             document.getElementById('display-to').style.display = needsNames ? 'block' : 'none';
             document.getElementById('display-from').style.display = needsNames ? 'block' : 'none';
             
-            if(!needsNames) {
-                document.getElementById('display-to').innerText = "";
-                document.getElementById('display-from').innerText = "";
-            }
-
             document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
             document.getElementById('payment-section').style.display = 'none';
@@ -128,28 +129,21 @@
         }
 
         function startProcess() {
-            alert("سيتم نقلك للبوت لإرسال الإيصال. يرجى العودة فوراً للتحميل.");
+            alert("سيتم نقلك للبوت لإرسال صورة الإيصال للتوثيق.");
             window.open(`https://t.me/HSfordesign_bot`, '_blank');
             
-            let btn = document.getElementById('downloadBtn');
             let wm = document.getElementById('wm');
-            btn.disabled = true;
-            
-            // إخفاء العلامة المائية مؤقتاً للتحميل فقط
-            wm.style.display = 'none';
+            wm.style.display = 'none'; // إخفاء العلامة المائية للتحميل فقط
 
             setTimeout(() => {
                 html2canvas(document.querySelector("#card-to-export"), {useCORS: true, scale: 3}).then(canvas => {
                     let link = document.createElement('a');
-                    link.download = 'HS-Eid-Card.jpg';
+                    link.download = 'HS-Design-Card.jpg';
                     link.href = canvas.toDataURL("image/jpeg");
                     link.click();
                     
-                    alert("تم تحميل البطاقة بنجاح ✅\nستجد الصورة في معرض الصور أو في مجلد التنزيلات.");
-                    
-                    wm.style.display = 'block';
-                    btn.innerText = "تم الحفظ بنجاح ✅";
-                    btn.disabled = false;
+                    wm.style.display = 'block'; // إعادة العلامة المائية
+                    alert("تم التحميل بنجاح ✅");
                 });
             }, 1000);
         }
