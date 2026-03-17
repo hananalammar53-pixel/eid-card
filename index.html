@@ -6,7 +6,6 @@
     <title>HSforDesign | متجر البطاقات</title>
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,6 +14,7 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
+        /* العلامة المائية السوداء للحماية */
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
             font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); font-weight: 900; pointer-events: none;
@@ -33,13 +33,12 @@
         
         #payment-section { display: none; margin-top: 20px; border-top: 2px dashed #444; padding-top: 20px; text-align: center; }
         
-        /* تصميم منطقة الباركود */
-        #qrcode { background: white; padding: 10px; border-radius: 10px; display: inline-block; margin-bottom: 15px; }
+        /* تصميم الباركود المستدعى كصورة */
+        .qr-image { width: 180px; height: 180px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         
         .iban-card { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #ce9e48; display: block; margin: 10px 0; border: 1px solid #444; cursor: pointer; }
-        
         .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; margin: 15px 0; color: #bbb; }
+        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; margin: 15px 0; color: #bbb; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -75,9 +74,9 @@
         <button id="main-action-btn" type="button" class="btn-primary" onclick="revealPayment()">الاستمرار للدفع</button>
 
         <div id="payment-section">
-            <h3 style="color: #ce9e48; margin-bottom: 15px;">امسح الباركود للتحويل</h3>
+            <h3 style="color: #ce9e48; margin-bottom: 15px;">امسح باركود الراجحي للدفع</h3>
             
-            <div id="qrcode"></div>
+            <img src="rajhi-qr.jpg" alt="Rajhi QR" class="qr-image">
             
             <div class="iban-card" onclick="copyIBAN()">
                 SA83 8000 0866 6080 1163 4427
@@ -97,16 +96,6 @@
     <script>
         let hasNames = false;
         const ibanNumber = "SA8380000866608011634427";
-
-        // توليد الباركود فور تحميل الصفحة (سيكون مخفياً في البداية)
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: ibanNumber,
-            width: 150,
-            height: 150,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
 
         function copyIBAN() {
             navigator.clipboard.writeText(ibanNumber);
@@ -148,7 +137,7 @@
             window.open(`https://t.me/HSfordesign_bot`, '_blank');
             
             let wm = document.getElementById('wm');
-            wm.style.display = 'none';
+            wm.style.display = 'none'; // إخفاء العلامة المائية للتحميل
 
             setTimeout(() => {
                 html2canvas(document.querySelector("#card-to-export"), {useCORS: true, scale: 3}).then(canvas => {
@@ -157,7 +146,7 @@
                     link.href = canvas.toDataURL("image/jpeg");
                     link.click();
                     
-                    wm.style.display = 'block';
+                    wm.style.display = 'block'; // إعادة العلامة المائية
                     alert("تم التحميل بنجاح ✅");
                 });
             }, 1000);
