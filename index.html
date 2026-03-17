@@ -14,11 +14,13 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
-        /* العلامة المائية */
+        /* العلامة المائية السوداء البارزة */
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 3rem; color: rgba(255, 255, 255, 0.2); font-weight: bold; pointer-events: none;
-            white-space: nowrap; z-index: 10; font-family: Arial, sans-serif; text-transform: uppercase;
+            font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); /* لون أسود شفاف قليلاً ليظهر فوق التصميم */
+            font-weight: 900; pointer-events: none; white-space: nowrap; z-index: 10;
+            font-family: 'Segoe UI', sans-serif; text-transform: uppercase;
+            letter-spacing: 5px; text-shadow: 1px 1px 2px rgba(255,255,255,0.1);
         }
 
         .text-overlay { position: absolute; width: 100%; text-align: center; pointer-events: none; font-family: 'Amiri', serif; font-weight: bold; display: none; }
@@ -30,7 +32,7 @@
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #444; border-radius: 5px; background: #333; color: white; text-align: center; font-size: 1rem; outline: none; }
         .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         #payment-section { display: none; margin-top: 20px; border-top: 2px dashed #444; padding-top: 20px; text-align: center; }
-        .iban-style { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #ce9e48; display: block; margin: 15px 0; border: 1px solid #444; }
+        .iban-style { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #ce9e48; display: block; margin: 15px 0; border: 1px solid #444; cursor: pointer; }
         .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; margin: 20px 0; color: #ddd; }
     </style>
@@ -145,7 +147,6 @@
                     
                     alert("تم تحميل البطاقة بنجاح ✅\nستجد الصورة في معرض الصور أو في مجلد التنزيلات.");
                     
-                    // إعادة إظهار العلامة المائية بعد التحميل
                     wm.style.display = 'block';
                     btn.innerText = "تم الحفظ بنجاح ✅";
                     btn.disabled = false;
