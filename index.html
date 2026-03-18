@@ -2,182 +2,176 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSforDesign | متجر البطاقات</title>
-    
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HS Design | بطاقة الأسماء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #ce9e48; margin-bottom: 20px; }
-        #card-to-export { position: relative; width: 100%; line-height: 0; }
-        .bg-image { width: 100%; height: auto; display: block; }
-        
-        /* العلامة المائية السوداء */
-        .watermark {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); font-weight: 900; pointer-events: none;
-            white-space: nowrap; z-index: 10; font-family: sans-serif; text-transform: uppercase;
+        :root {
+            --gold-color: #bfa36a; /* اللون الذهبي المطفي الموحد */
+            --dark-bg: #121212;
         }
 
-        .text-overlay { position: absolute; width: 100%; text-align: center; pointer-events: none; font-family: 'Amiri', serif; font-weight: bold; display: none; }
-        .selector-area { width: 100%; max-width: 400px; display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
-        .thumb { width: 100px; text-align: center; border-radius: 8px; border: 2px solid #444; cursor: pointer; background: #2a2a2a; transition: 0.3s; }
-        .thumb.active { border-color: #ce9e48; transform: scale(1.05); }
-        .thumb img { width: 100%; height: 60px; object-fit: cover; border-radius: 5px 5px 0 0; }
-        
-        .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #444; border-radius: 5px; background: #333; color: white; text-align: center; font-size: 1rem; outline: none; }
-        .btn-primary { background: #ce9e48; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        
-        #payment-section { display: none; margin-top: 20px; border-top: 2px dashed #444; padding-top: 20px; text-align: center; }
-        .qr-image { width: 180px; height: 180px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; }
-        
-        /* تأثيرات العداد والاهتزاز */
-        #timer-display { font-weight: bold; color: #ce9e48; background: rgba(206, 158, 72, 0.1); padding: 10px; border-radius: 10px; display: none; margin: 15px 0; border: 1px solid #ce9e48; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.6;} 100% {opacity: 1;} }
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
-        .shake-me { animation: shake 0.4s ease-in-out; }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--dark-bg);
+            font-family: 'Amiri', serif;
+        }
 
-        .iban-card { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #ce9e48; display: block; margin: 10px 0; border: 1px solid #444; cursor: pointer; }
-        .disabled-check { opacity: 0.3; pointer-events: none; }
-        .enabled-check { opacity: 1; pointer-events: auto; }
-        .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; margin: 15px 0; color: #bbb; cursor: pointer; }
+        .card-wrapper {
+            position: relative;
+            width: 350px; /* مقاس مناسب للجوال */
+            height: 600px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 15px;
+        }
+
+        /* صورة الخلفية الفخمة */
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* طبقة النصوص */
+        .content-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .names-container {
+            margin-top: 100px; /* تعديل المكان ليناسب الفراغ في التصميم */
+            text-align: right;
+            width: 80%;
+        }
+
+        .name-row {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* تسميات "إلى" و "من" */
+        .label {
+            color: var(--gold-color);
+            font-size: 22px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* الأسماء المدخلة - تم توحيد لونها هنا */
+        .user-name {
+            color: var(--gold-color); /* اللون الذهبي الموحد */
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(191, 163, 106, 0.3);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* العلامة المائية لحماية الفيديو */
+        .watermark {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-family: 'Cairo', sans-serif;
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.15); /* شفافة جداً */
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            z-index: 10;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        /* مدخلات البيانات (تختفي عند التنزيل/التصوير) */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid var(--gold-color);
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        button {
+            background-color: var(--gold-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media print {
+            .controls { display: none; }
+            .watermark { display: none; } /* تختفي العلامة المائية عند الطباعة أو التصدير النهائي */
+        }
     </style>
 </head>
 <body>
 
-    <h2 style="color: #ce9e48; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
-
-    <div class="selector-area">
-        <div class="thumb active" onclick="changeCard('eid-garden.jpg', false, this)">
-            <img src="eid-garden.jpg">
-            <p style="font-size: 0.7rem; color: #ddd; margin: 5px 0;">الحديقة</p>
-        </div>
-        <div class="thumb" onclick="changeCard('card.jpg', true, this)">
-            <img src="card.jpg">
-            <p style="font-size: 0.7rem; color: #ddd; margin: 5px 0;">بالأسماء</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <div id="card-to-export">
-            <img id="main-card-img" src="eid-garden.jpg" class="bg-image">
-            <div id="wm" class="watermark">HS DESIGN</div>
-            <div id="display-to" class="text-overlay" style="top: 58%; font-size: 1.8rem; color:#ce9e48;"></div>
-            <div id="display-from" class="text-overlay" style="top: 65%; font-size: 1.4rem; color:#ce9e48;"></div>
-        </div>
-    </div>
-
-    <div class="panel">
-        <div id="inputs-area" style="display: none;">
-            <input type="text" id="input-to" placeholder="إلى: (اسم المستلم)" oninput="updateText()">
-            <input type="text" id="input-from" placeholder="من: (اسمك)" oninput="updateText()">
-        </div>
+    <div class="card-wrapper" id="capture">
+        <img src="your-background-image.jpg" class="background-image" alt="Background">
         
-        <button id="main-action-btn" type="button" class="btn-primary" onclick="revealPayment()">الاستمرار للدفع</button>
+        <div class="watermark">HS DESIGN</div>
 
-        <div id="payment-section">
-            <h3 style="color: #ce9e48; margin-bottom: 15px;">خطوات التحويل</h3>
-            
-            <img src="rajhi-qr.jpg" id="qr-img" class="qr-image" onclick="startTimer()">
-            
-            <div class="iban-card" id="iban-box" onclick="copyIBAN()">
-                SA83 8000 0866 6080 1163 4427
-                <div style="font-size: 0.65rem; color: #666; margin-top: 5px;">(أو اضغط هنا لنسخ الآيبان)</div>
-            </div>
-            
-            <p id="lock-msg" style="font-size: 0.8rem; color: #ff4d4d; margin: 10px 0;">⚠️ انسخ الآيبان أو الباركود أولاً</p>
-            
-            <div id="timer-display">يرجى الانتظار <span id="seconds">30</span> ثانية للتأكد من التحويل...</div>
-
-            <div id="check-wrapper" class="disabled-check">
-                <label class="checkbox-container">
-                    <input type="checkbox" id="paidCheck" onchange="toggleDownloadBtn()"> أكدت عملية التحويل بنجاح
-                </label>
-                <button id="downloadBtn" class="btn-download" onclick="startProcess()">إرسال الإيصال وتحميل البطاقة 🚀</button>
+        <div class="content-overlay">
+            <div class="names-container">
+                <div class="name-row">
+                    <span class="label">إلى:</span>
+                    <span id="toOutput" class="user-name">هـلا</span>
+                </div>
+                <div class="name-row">
+                    <span class="label">من:</span>
+                    <span id="fromOutput" class="user-name">نـورة</span>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="toInput" placeholder="اسم المستلم" oninput="updateNames()">
+        <input type="text" id="fromInput" placeholder="اسم المرسل" oninput="updateNames()">
+        <button onclick="downloadCard()">حفظ الصورة</button>
     </div>
 
     <script>
-        let hasNames = false;
-        let isProcessing = false;
-        let timeRemaining = 30;
-
-        function changeCard(imgSrc, needsNames, element) {
-            document.getElementById('main-card-img').src = imgSrc;
-            hasNames = needsNames;
-            document.getElementById('inputs-area').style.display = needsNames ? 'block' : 'none';
-            document.getElementById('display-to').style.display = needsNames ? 'block' : 'none';
-            document.getElementById('display-from').style.display = needsNames ? 'block' : 'none';
-            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('payment-section').style.display = 'none';
-            document.getElementById('main-action-btn').style.display = 'block';
+        function updateNames() {
+            document.getElementById('toOutput').innerText = document.getElementById('toInput').value || 'هـلا';
+            document.getElementById('fromOutput').innerText = document.getElementById('fromInput').value || 'نـورة';
         }
 
-        function updateText() {
-            document.getElementById('display-to').innerText = document.getElementById('input-to').value;
-            document.getElementById('display-from').innerText = document.getElementById('input-from').value;
-        }
-
-        function revealPayment() {
-            if (hasNames && (document.getElementById('input-to').value === "" || document.getElementById('input-from').value === "")) {
-                alert("لطفاً اكتب الأسماء أولاً"); return;
-            }
-            document.getElementById('payment-section').style.display = 'block';
-            document.getElementById('main-action-btn').style.display = 'none';
-        }
-
-        function startTimer() {
-            if (isProcessing) return;
-            isProcessing = true;
-            document.getElementById('lock-msg').style.display = 'none';
-            document.getElementById('timer-display').style.display = 'block';
-            
-            let countdown = setInterval(() => {
-                timeRemaining--;
-                document.getElementById('seconds').innerText = timeRemaining;
-                if (timeRemaining <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById('timer-display').style.display = 'none';
-                    document.getElementById('check-wrapper').className = "enabled-check";
-                    document.getElementById('lock-msg').innerText = "✅ يمكنك الآن التأكيد والتحميل";
-                    document.getElementById('lock-msg').style.color = "#28a745";
-                    document.getElementById('lock-msg').style.display = 'block';
-                }
-            }, 1000);
-        }
-
-        function copyIBAN() {
-            navigator.clipboard.writeText("SA8380000866608011634427");
-            document.getElementById('iban-box').classList.add('shake-me');
-            setTimeout(() => document.getElementById('iban-box').classList.remove('shake-me'), 400);
-            alert("تم نسخ الآيبان، فضلاً حول المبلغ ثم انتظر انتهاء العداد.");
-            startTimer();
-        }
-
-        function toggleDownloadBtn() {
-            document.getElementById('downloadBtn').style.display = document.getElementById('paidCheck').checked ? 'block' : 'none';
-        }
-
-        function startProcess() {
-            alert("سيتم نقلك للبوت لإرسال الإيصال. يرجى العودة للتحميل.");
-            window.open(`https://t.me/HSfordesign_bot`, '_blank');
-            document.getElementById('wm').style.display = 'none';
-            setTimeout(() => {
-                html2canvas(document.querySelector("#card-to-export"), {useCORS: true, scale: 3}).then(canvas => {
-                    let link = document.createElement('a');
-                    link.download = 'HS-Design-Final.jpg';
-                    link.href = canvas.toDataURL("image/jpeg");
-                    link.click();
-                    document.getElementById('wm').style.display = 'block';
-                    alert("تم التحميل بنجاح ✅");
-                });
-            }, 1000);
+        function downloadCard() {
+            // هنا تضعين كود مكتبة html2canvas اللي استخدمناها سابقاً
+            // لتمكينك من تحميل الصورة "الصافية" لعميلك
+            alert("سيتم تحميل البطاقة الصافية الآن...");
         }
     </script>
 </body>
