@@ -5,150 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HS Design | بطاقة الأسماء</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --gold-color: #bfa36a; /* اللون الذهبي المطفي الموحد */
+            --gold-color: #bfa36a; 
             --dark-bg: #121212;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: var(--dark-bg);
-            font-family: 'Amiri', serif;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: var(--dark-bg);
+            font-family: 'Amiri', serif; overflow: hidden;
         }
 
         .card-wrapper {
             position: relative;
-            width: 350px; /* مقاس مناسب للجوال */
+            width: 350px;
             height: 600px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* تم تعديل المسار هنا ليتطابق مع اسم ملفك card.jpg */
+            background-image: url('card.jpg'); 
+            background-size: cover;
+            background-position: center;
             border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* صورة الخلفية الفخمة */
-        .background-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* طبقة النصوص */
-        .content-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .names-container {
-            margin-top: 100px; /* تعديل المكان ليناسب الفراغ في التصميم */
-            text-align: right;
-            width: 80%;
-        }
-
-        .name-row {
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        /* تسميات "إلى" و "من" */
-        .label {
-            color: var(--gold-color);
-            font-size: 22px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        /* الأسماء المدخلة - تم توحيد لونها هنا */
-        .user-name {
-            color: var(--gold-color); /* اللون الذهبي الموحد */
-            font-size: 28px;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(191, 163, 106, 0.3);
-            min-width: 120px;
-            text-align: center;
-        }
-
-        /* العلامة المائية لحماية الفيديو */
         .watermark {
             position: absolute;
-            top: 40%;
-            left: 50%;
+            top: 40%; left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
             font-family: 'Cairo', sans-serif;
-            font-size: 40px;
-            color: rgba(255, 255, 255, 0.15); /* شفافة جداً */
-            white-space: nowrap;
-            user-select: none;
-            pointer-events: none;
-            z-index: 10;
-            font-weight: bold;
-            letter-spacing: 5px;
+            font-size: 35px; color: rgba(255, 255, 255, 0.1);
+            white-space: nowrap; user-select: none; pointer-events: none; z-index: 10;
         }
 
-        /* مدخلات البيانات (تختفي عند التنزيل/التصوير) */
+        .content-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center;
+            padding-bottom: 215px; /* المسافة اللي ترفع الأسماء فوق الخطوط */
+        }
+
+        .names-container { width: 85%; text-align: right; }
+
+        .name-row {
+            margin: 5px 0;
+            display: flex; align-items: center; justify-content: flex-start;
+        }
+
+        .label {
+            color: var(--gold-color);
+            font-size: 20px; font-weight: bold; margin-left: 10px;
+        }
+
+        .user-name {
+            color: var(--gold-color); /* اللون الذهبي المطابق للكلمات الثابتة */
+            font-size: 26px; font-weight: bold; flex-grow: 1; text-align: center;
+        }
+
         .controls {
-            position: fixed;
-            bottom: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
+            position: fixed; bottom: 0; width: 100%;
+            background: #fff; padding: 15px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2); z-index: 100;
         }
 
         input {
-            padding: 8px;
-            border: 1px solid var(--gold-color);
-            border-radius: 5px;
-            font-family: 'Cairo', sans-serif;
+            width: 100px; padding: 8px; border: 1px solid #ddd;
+            border-radius: 5px; text-align: center; font-family: 'Cairo', sans-serif;
         }
 
-        button {
-            background-color: var(--gold-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        @media print {
-            .controls { display: none; }
-            .watermark { display: none; } /* تختفي العلامة المائية عند الطباعة أو التصدير النهائي */
+        .btn-save {
+            background-color: var(--gold-color); color: white;
+            border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="card-wrapper" id="capture">
-        <img src="your-background-image.jpg" class="background-image" alt="Background">
-        
-        <div class="watermark">HS DESIGN</div>
-
+    <div id="capture" class="card-wrapper">
+        <div class="watermark" id="watermark">HS DESIGN</div>
         <div class="content-overlay">
             <div class="names-container">
                 <div class="name-row">
                     <span class="label">إلى:</span>
                     <span id="toOutput" class="user-name">هـلا</span>
                 </div>
-                <div class="name-row">
+                <div class="name-row" style="margin-top: 20px;">
                     <span class="label">من:</span>
                     <span id="fromOutput" class="user-name">نـورة</span>
                 </div>
@@ -157,9 +102,9 @@
     </div>
 
     <div class="controls">
-        <input type="text" id="toInput" placeholder="اسم المستلم" oninput="updateNames()">
-        <input type="text" id="fromInput" placeholder="اسم المرسل" oninput="updateNames()">
-        <button onclick="downloadCard()">حفظ الصورة</button>
+        <button class="btn-save" onclick="downloadCard()">حفظ الصورة</button>
+        <input type="text" id="fromInput" placeholder="من" oninput="updateNames()">
+        <input type="text" id="toInput" placeholder="إلى" oninput="updateNames()">
     </div>
 
     <script>
@@ -169,9 +114,17 @@
         }
 
         function downloadCard() {
-            // هنا تضعين كود مكتبة html2canvas اللي استخدمناها سابقاً
-            // لتمكينك من تحميل الصورة "الصافية" لعميلك
-            alert("سيتم تحميل البطاقة الصافية الآن...");
+            const watermark = document.getElementById('watermark');
+            const controls = document.querySelector('.controls');
+            watermark.style.display = 'none'; 
+
+            html2canvas(document.querySelector("#capture")).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'HS-Design-Card.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                watermark.style.display = 'block'; 
+            });
         }
     </script>
 </body>
