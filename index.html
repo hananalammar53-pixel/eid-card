@@ -10,55 +10,41 @@
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #bfa36a; margin-bottom: 20px; }
+        .container { position: relative; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #d8bb8d; margin-bottom: 20px; }
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
+        /* العلامة المائية السوداء للفيديو */
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
             font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); font-weight: 900; pointer-events: none;
             white-space: nowrap; z-index: 10; font-family: sans-serif; text-transform: uppercase;
         }
 
-        /* تأثير الذهب البارز المطور */
-        .text-overlay { 
-            position: absolute; 
-            width: 100%; 
-            text-align: center; 
-            pointer-events: none; 
-            font-family: 'Amiri', serif; 
-            font-weight: bold; 
-            display: none;
-            /* سر اللمعة المعدنية */
-            background: linear-gradient(to bottom, #f9f2d1 0%, #ce9e48 45%, #8c6d31 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            /* سر البروز الثلاثي الأبعاد */
-            filter: drop-shadow(1px 1px 0px #4d3a1a) 
-                    drop-shadow(2px 2px 2px rgba(0,0,0,0.7));
-        }
+        .text-overlay { position: absolute; width: 100%; text-align: center; pointer-events: none; font-family: 'Amiri', serif; font-weight: bold; display: none; }
         
-        #display-to { top: 58.2%; font-size: 1.9rem; }
-        #display-from { top: 65.2%; font-size: 1.5rem; }
+        /* تم تحديث ألوان الأسماء هنا لتطابق #d8bb8d */
+        #display-to { top: 58.5%; font-size: 1.8rem; color: #d8bb8d; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        #display-from { top: 65.5%; font-size: 1.4rem; color: #d8bb8d; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
 
         .selector-area { width: 100%; max-width: 400px; display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
         .thumb { width: 100px; text-align: center; border-radius: 8px; border: 2px solid #444; cursor: pointer; background: #2a2a2a; transition: 0.3s; }
-        .thumb.active { border-color: #bfa36a; transform: scale(1.05); }
+        .thumb.active { border-color: #d8bb8d; transform: scale(1.05); }
         .thumb img { width: 100%; height: 60px; object-fit: cover; border-radius: 5px 5px 0 0; }
         
         .panel { width: 100%; max-width: 400px; background: #2a2a2a; padding: 25px; border-radius: 15px; box-sizing: border-box; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #444; border-radius: 5px; background: #333; color: white; text-align: center; font-size: 1rem; outline: none; }
-        .btn-primary { background: #bfa36a; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .btn-primary { background: #d8bb8d; color: #1a1a1a; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         
         #payment-section { display: none; margin-top: 20px; border-top: 2px dashed #444; padding-top: 20px; text-align: center; }
         .qr-image { width: 180px; height: 180px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; }
         
-        #timer-display { font-weight: bold; color: #bfa36a; background: rgba(191, 163, 106, 0.1); padding: 10px; border-radius: 10px; display: none; margin: 15px 0; border: 1px solid #bfa36a; animation: pulse 1s infinite; }
+        #timer-display { font-weight: bold; color: #d8bb8d; background: rgba(216, 187, 141, 0.1); padding: 10px; border-radius: 10px; display: none; margin: 15px 0; border: 1px solid #d8bb8d; animation: pulse 1s infinite; }
         @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.6;} 100% {opacity: 1;} }
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
         .shake-me { animation: shake 0.4s ease-in-out; }
 
-        .iban-card { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #bfa36a; display: block; margin: 10px 0; border: 1px solid #444; cursor: pointer; }
+        .iban-card { background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #d8bb8d; display: block; margin: 10px 0; border: 1px solid #444; cursor: pointer; }
         .disabled-check { opacity: 0.3; pointer-events: none; }
         .enabled-check { opacity: 1; pointer-events: auto; }
         .btn-download { background: #28a745; color: white; display: none; margin-top: 15px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
@@ -67,7 +53,7 @@
 </head>
 <body>
 
-    <h2 style="color: #bfa36a; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
+    <h2 style="color: #d8bb8d; font-family: 'Amiri', serif; margin-bottom: 10px;">HSforDesign</h2>
 
     <div class="selector-area">
         <div class="thumb active" onclick="changeCard('eid-garden.jpg', false, this)">
@@ -98,7 +84,7 @@
         <button id="main-action-btn" type="button" class="btn-primary" onclick="revealPayment()">الاستمرار للدفع</button>
 
         <div id="payment-section">
-            <h3 style="color: #bfa36a; margin-bottom: 15px;">خطوات التحويل</h3>
+            <h3 style="color: #d8bb8d; margin-bottom: 15px;">خطوات التحويل</h3>
             
             <img src="rajhi-qr.jpg" id="qr-img" class="qr-image" onclick="startTimer()">
             
