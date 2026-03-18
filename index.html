@@ -14,18 +14,32 @@
         #card-to-export { position: relative; width: 100%; line-height: 0; }
         .bg-image { width: 100%; height: auto; display: block; }
         
-        /* العلامة المائية السوداء للفيديو */
         .watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
             font-size: 3.5rem; color: rgba(0, 0, 0, 0.4); font-weight: 900; pointer-events: none;
             white-space: nowrap; z-index: 10; font-family: sans-serif; text-transform: uppercase;
         }
 
-        .text-overlay { position: absolute; width: 100%; text-align: center; pointer-events: none; font-family: 'Amiri', serif; font-weight: bold; display: none; }
+        /* تأثير الذهب البارز المطور */
+        .text-overlay { 
+            position: absolute; 
+            width: 100%; 
+            text-align: center; 
+            pointer-events: none; 
+            font-family: 'Amiri', serif; 
+            font-weight: bold; 
+            display: none;
+            /* سر اللمعة المعدنية */
+            background: linear-gradient(to bottom, #f9f2d1 0%, #ce9e48 45%, #8c6d31 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* سر البروز الثلاثي الأبعاد */
+            filter: drop-shadow(1px 1px 0px #4d3a1a) 
+                    drop-shadow(2px 2px 2px rgba(0,0,0,0.7));
+        }
         
-        /* تم توحيد ألوان الأسماء هنا لتطابق #bfa36a */
-        #display-to { top: 58.5%; font-size: 1.8rem; color: #bfa36a; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        #display-from { top: 65.5%; font-size: 1.4rem; color: #bfa36a; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        #display-to { top: 58.2%; font-size: 1.9rem; }
+        #display-from { top: 65.2%; font-size: 1.5rem; }
 
         .selector-area { width: 100%; max-width: 400px; display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
         .thumb { width: 100px; text-align: center; border-radius: 8px; border: 2px solid #444; cursor: pointer; background: #2a2a2a; transition: 0.3s; }
